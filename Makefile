@@ -2,7 +2,7 @@ PROJECT_NAME=tanks_elixir
 
 # Для первой инициалиции феникс проекта через докер
 docker-initialize-project:
-	docker-compose -f docker-compose.dev.yml run ${PROJECT_NAME} mix phx.new . --no-gettext --live --app ${PROJECT_NAME}
+	docker-compose -f docker-compose.dev.yml run ${PROJECT_NAME} mix phx.new . --no-gettext --app ${PROJECT_NAME}
 
 # Для первого запуска локально
 dev-bootstrap:

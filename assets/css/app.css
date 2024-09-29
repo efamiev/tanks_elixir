@@ -2,4 +2,8 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+canvas {
+	background-color: black;
+}
+
 /* This file is for your main application CSS */
