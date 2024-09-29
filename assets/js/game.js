@@ -1,5 +1,8 @@
 const canvas = document.querySelector("canvas")
 const context = canvas.getContext("2d")
+const tankWidth = 41
+const tankHeight = 60
+
 const keys = new Set()
 let direction = ""
 
@@ -27,21 +30,18 @@ const loadSprite = () => {
 }
 
 const updateTank = (sprite, x, y) => {
-	if (keys.has('ArrowUp')) {
-		direction = "up"
-		return renderPlayerTank(sprite, x, y - 1)
-	} else if (keys.has('ArrowRight')) {
-		direction = "right"
-		return renderPlayerTank(sprite, x + 1, y)
-	} else if (keys.has('ArrowDown')) {
-		direction = "down"
-		return renderPlayerTank(sprite, x, y + 1)
-	} else if (keys.has('ArrowLeft')) {
-		direction = "left"
-		return renderPlayerTank(sprite, x - 1, y)
-	}
+	const [updatedX, updatedY, updatedDirection] = (() => {
+		if (keys.has('ArrowUp')) return y - 1 < 0 ?  [x, y, "up"] : [x, y -1, "up"]
+		if (keys.has('ArrowRight'))	return x + tankHeight - 10 > canvas.width ?  [x, y, "right"] : [x + 1, y, "right"]
+		if (keys.has('ArrowDown')) return y + tankHeight > canvas.height ?  [x, y, "down"] : [x, y + 1, "down"]
+		if (keys.has('ArrowLeft')) return x - 10 < 0 ?  [x, y, "left"] : [x - 1, y, "left"]
+		
+		return [x, y, direction]
+	})()
 
-	return renderPlayerTank(sprite, x, y)
+	direction = updatedDirection
+
+	return renderPlayerTank(sprite, updatedX, updatedY)
 }
 
 const renderPlayerTank = (sprite, x, y) => {
@@ -64,7 +64,7 @@ const renderPlayerTank = (sprite, x, y) => {
 			break
 	}
 
-	drawRotatedTank(context, sprite, x, y, 41, 60, angle)
+	drawRotatedTank(context, sprite, x, y, tankWidth, tankHeight, angle)
 
 	return tank_coords
 }
@@ -101,7 +101,7 @@ const clearScreen = () => {
 	context.clearRect(0, 0, canvas.width, canvas.height)
 }
 
-function drawRotatedTank(context, sprite, x, y, width, height, angle) {
+const drawRotatedTank = (context, sprite, x, y, width, height, angle) => {
     // Save the current state of the context
     context.save();
 
